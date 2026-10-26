@@ -145,31 +145,31 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-3.5 sm:p-6 space-y-4 sm:space-y-6 max-w-7xl mx-auto w-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold text-stone-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+          <h1 className="text-2xl sm:text-3xl font-bold text-stone-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
             Admin Dashboard
           </h1>
-          <p className="text-stone-500 text-sm mt-0.5">
+          <p className="text-stone-500 text-xs sm:text-sm mt-0.5">
             Welcome back! Here's what's happening today.
           </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-2 self-start sm:self-auto">
           <button onClick={reload}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-stone-600 bg-white border border-stone-200 rounded-xl hover:border-amber-300 transition-colors">
-            <RefreshCw className="w-4 h-4" /> Refresh
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-medium text-stone-600 bg-white border border-stone-200 rounded-xl hover:border-amber-300 transition-colors shadow-2xs">
+            <RefreshCw className="w-3.5 h-3.5" /> Refresh
           </button>
-          <Link to="/booking" target="_blank"
-            className="btn-gold px-4 py-2 rounded-xl text-white text-sm font-semibold flex items-center gap-2">
+          <Link to="/" target="_blank"
+            className="btn-gold px-3.5 py-1.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow-sm">
             View Site
           </Link>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         <DashboardCard title="Total Shops" value={counts.shops} icon={Store} color="brown" subtitle={`${counts.activeShops} active`} />
         <DashboardCard title="Total Bookings" value={counts.total} icon={CalendarCheck} color="gold" />
         <DashboardCard title="Pending" value={counts.pending} icon={Clock} color="orange" />

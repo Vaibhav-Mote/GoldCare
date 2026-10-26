@@ -90,15 +90,15 @@ export default function BookingManagement() {
   };
 
   return (
-    <div className="p-6 flex gap-6 h-full">
+    <div className="p-3.5 sm:p-6 flex flex-col lg:flex-row gap-6 h-full">
       {/* Main panel */}
-      <div className={`flex-1 space-y-4 min-w-0 ${selectedBooking ? 'max-w-[calc(100%-380px)]' : ''}`}>
+      <div className={`flex-1 space-y-4 min-w-0 ${selectedBooking ? 'lg:max-w-[calc(100%-380px)]' : ''}`}>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-stone-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
+            <h1 className="text-2xl sm:text-3xl font-bold text-stone-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
               Booking Management
             </h1>
-            <p className="text-stone-500 text-sm">{filtered.length} bookings found</p>
+            <p className="text-stone-500 text-xs sm:text-sm">{filtered.length} bookings found</p>
           </div>
         </div>
 
@@ -152,7 +152,7 @@ export default function BookingManagement() {
 
       {/* Detail panel */}
       {selectedBooking && (
-        <div className="w-96 shrink-0">
+        <div className="w-full lg:w-96 shrink-0">
           <div className="bg-white rounded-2xl border border-amber-100 shadow-sm sticky top-4 max-h-[calc(100vh-6rem)] overflow-y-auto animate-fade-in">
             <div className="flex items-center justify-between p-4 border-b border-amber-100">
               <h2 className="font-bold text-stone-800" style={{ fontFamily: 'Cormorant Garamond, serif' }}>
