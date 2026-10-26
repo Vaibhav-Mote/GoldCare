@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GoldCare Project Documentation - Academic Report</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+    @page {
+      size: A4;
+      margin: 20mm 18mm 20mm 18mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1c1917;
+      line-height: 1.6;
+      font-size: 11pt;
+      background: #ffffff;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    /* Cover Page */
+    .cover {
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 3px double #d97706;
+      padding: 40px;
+      background: radial-gradient(circle at top right, #fffbeb 0%, #ffffff 70%);
+      text-align: center;
+    }
+
+    .cover-top {
+      margin-top: 40px;
+    }
+
+    .badge-gold {
+      display: inline-block;
+      padding: 6px 16px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #f59e0b;
+      border-radius: 9999px;
+      font-size: 10pt;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    .cover-title {
+      font-family: 'Cinzel', serif;
+      font-size: 32pt;
+      font-weight: 800;
+      color: #78350f;
+      letter-spacing: 1.5px;
+      line-height: 1.2;
+      margin-bottom: 15px;
+    }
+
+    .cover-subtitle {
+      font-size: 13pt;
+      color: #44403c;
+      max-width: 650px;
+      margin: 0 auto 30px auto;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .cover-meta {
+      background: #fdfaf3;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .cover-meta-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 10.5pt;
+      border-bottom: 1px dashed #fcd34d;
+    }
+
+    .cover-meta-row:last-child {
+      border-bottom: none;
+    }
+
+    .meta-label {
+      color: #78350f;
+      font-weight: 600;
+    }
+
+    .meta-value {
+      color: #1c1917;
+      font-weight: 500;
+    }
+
+    .cover-footer {
+      font-size: 9.5pt;
+      color: #78716c;
+      border-top: 1px solid #e7e5e4;
+      padding-top: 15px;
+    }
+
+    /* Content Styling */
+    h1, h2, h3, h4 {
+      font-family: 'Cinzel', serif;
+      color: #78350f;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 20pt;
+      border-bottom: 2px solid #d97706;
+      padding-bottom: 6px;
+      margin-top: 30px;
+    }
+
+    h2 {
+      font-size: 15pt;
+      border-bottom: 1px solid #fed7aa;
+      padding-bottom: 4px;
+      margin-top: 20px;
+    }
+
+    h3 {
+      font-size: 12pt;
+      color: #92400e;
+    }
+
+    p {
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-left: 24px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      border: 1px solid #e7e5e4;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #fef3c7;
+      color: #78350f;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafaf9;
+    }
+
+    /* Callout Boxes */
+    .callout {
+      background: #fdfaf3;
+      border-left: 4px solid #d97706;
+      padding: 12px 16px;
+      margin: 16px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 10pt;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #78350f;
+      margin-bottom: 4px;
+    }
+
+    /* Code Blocks */
+    pre, code {
+      font-family: 'Fira Code', monospace;
+      font-size: 9pt;
+      background: #f5f5f4;
+      border-radius: 4px;
+    }
+
+    code {
+      padding: 2px 5px;
+      color: #b45309;
+    }
+
+    pre {
+      padding: 12px;
+      overflow-x: auto;
+      border: 1px solid #e7e5e4;
+      margin: 14px 0;
+      background: #1c1917;
+      color: #f5f5f4;
+      border-radius: 6px;
+    }
+
+    pre code {
+      background: transparent;
+      color: #fcd34d;
+      padding: 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .feature-card {
+      border: 1px solid #fed7aa;
+      background: #fffef7;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .feature-card h4 {
+      margin-top: 0;
+      margin-bottom: 6px;
+      font-size: 10.5pt;
+    }
+
+    .feature-card p {
+      font-size: 9.5pt;
+      margin-bottom: 0;
+      color: #57534e;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== COVER PAGE ==================== -->
+  <div class="cover">
+    <div class="cover-top">
+      <span class="badge-gold">Project Presentation & Documentation</span>
+      <h1 class="cover-title">GOLDCARE</h1>
+      <p class="cover-subtitle">
+        A Modern, Responsive Jewellery Repair Booking, Real-Time Tracking & UPI Payment Escrow Management Platform
+      </p>
+    </div>
+
+    <div class="cover-meta">
+      <div class="cover-meta-row">
+        <span class="meta-label">Student / Developer:</span>
+        <span class="meta-value">Vaibhav Mote</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">Project Domain:</span>
+        <span class="meta-value">Full-Stack Frontend & Web Engineering</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">Core Technologies:</span>
+        <span class="meta-value">React.js 19, Vite 8, Tailwind CSS v4</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">Routing & Icons:</span>
+        <span class="meta-value">React Router DOM (HashRouter), Lucide Icons</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">Data Architecture:</span>
+        <span class="meta-value">Client-Side Persistence (LocalStorage API)</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">Deployment:</span>
+        <span class="meta-value">GitHub Pages (CI/CD GitHub Actions)</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">Live Project URL:</span>
+        <span class="meta-value" style="font-size: 9pt;">https://vaibhav-mote.github.io/GoldCare/</span>
+      </div>
+      <div class="cover-meta-row">
+        <span class="meta-label">GitHub Repository:</span>
+        <span class="meta-value" style="font-size: 9pt;">https://github.com/Vaibhav-Mote/GoldCare</span>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      Academic Year 2026 | Submitted for Computer Science / Software Engineering Evaluation
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== EXECUTIVE SUMMARY ==================== -->
+  <h1>1. Executive Summary & Abstract</h1>
+  <p>
+    The jewellery repair industry in India and worldwide relies predominantly on unorganized, paper-based workflows. Customers face significant friction points including lack of transparent pricing, absence of digital repair progress tracking, insecure cash advances, and difficulty discovering verified artisanal goldsmiths.
+  </p>
+  <p>
+    <strong>GoldCare</strong> is an end-to-end, single-page application (SPA) created to digitize and elevate the jewellery repair ecosystem. Built with a luxurious aesthetic inspired by high-end jewellery houses (gold, cream, and deep espresso tones), GoldCare provides customers with instant access to catalogued repair services, verified local workshops, an interactive 3-step repair booking engine, a real-time scannable <strong>UPI QR code payment gateway</strong>, and milestone tracking.
+  </p>
+  <p>
+    Simultaneously, GoldCare equips shop owners and platform administrators with a dedicated, protected management back-office to oversee partner shops, modify repair statuses, maintain customer records, export CSV business analytics, and track payments without requiring any external server infrastructure.
+  </p>
+
+  <div class="callout">
+    <div class="callout-title">Architecture Philosophy: 100% Serverless & Zero-Backend</div>
+    The entire application runs as a high-performance static web application hosted freely on GitHub Pages. All state mutations, shop profiles, repair bookings, and administrative settings persist reliably in the browser's <strong>LocalStorage API</strong>, making it lightweight, zero-maintenance, and cost-free to operate.
+  </div>
+
+  <!-- ==================== PROBLEM STATEMENT & OBJECTIVES ==================== -->
+  <h2>2. Problem Statement & Key Objectives</h2>
+  <div class="card-grid">
+    <div class="feature-card">
+      <h4>Traditional Industry Challenges</h4>
+      <p>• Loss of paper receipts and warranty claims.<br>
+         • Uncertainty regarding repair milestones and completion dates.<br>
+         • No upfront cost estimates or transparent advance handling.<br>
+         • Inability for artisans to showcase verified specializations.</p>
+    </div>
+    <div class="feature-card">
+      <h4>GoldCare Solutions</h4>
+      <p>• Unique Tracking ID (e.g., <code>GC-2026-0001</code>) with digital receipts.<br>
+         • Live 4-stage visual progress timeline.<br>
+         • Real UPI QR Code gateway with advance vs. full payment options.<br>
+         • Filterable directory of certified master craftsmen.</p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SYSTEM ARCHITECTURE ==================== -->
+  <h1>3. System Architecture & Technology Stack</h1>
+  <p>
+    GoldCare adopts a modern component-driven architecture designed for high maintainability, instantaneous navigation (HMR & Client-Side Routing), and maximum accessibility across devices.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Technology</th>
+        <th>Role & Key Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Frontend Framework</strong></td>
+        <td>React.js 19 + Vite 8</td>
+        <td>Component lifecycle, lightning-fast dev bundling, and reactive state management.</td>
+      </tr>
+      <tr>
+        <td><strong>Styling & Design System</strong></td>
+        <td>Tailwind CSS v4 + Custom Tokens</td>
+        <td>Utility-first responsive layouts with tailored gold/cream palettes, glassmorphism & shimmer animations.</td>
+      </tr>
+      <tr>
+        <td><strong>Routing Engine</strong></td>
+        <td>React Router DOM v7 (HashRouter)</td>
+        <td>Enables seamless multi-page routing on GitHub Pages without requiring server-side 404 URL rewriting.</td>
+      </tr>
+      <tr>
+        <td><strong>Icons & Assets</strong></td>
+        <td>Lucide React</td>
+        <td>Scalable, crisp SVG iconography representing jewellery, security, and administrative actions.</td>
+      </tr>
+      <tr>
+        <td><strong>Data Persistence</strong></td>
+        <td>Browser LocalStorage API</td>
+        <td>Acts as an embedded client-side database with complete CRUD operations and fallback seed data.</td>
+      </tr>
+      <tr>
+        <td><strong>Deployment & CI/CD</strong></td>
+        <td>GitHub Actions + GitHub Pages</td>
+        <td>Automated linting, building, and static deployment triggered on every Git push to <code>main</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Application Hierarchy & Routing Map</h2>
+  <pre><code>Root (HashRouter)
+├── Public MainLayout (Navbar + Outlet + Footer)
+│   ├── #/              ➔ Home Page (Hero, Trust Pillars, Services Carousel, Reviews)
+│   ├── #/services      ➔ Service Catalog (10+ repairs with turnaround times & pricing)
+│   ├── #/shops         ➔ Partner Shops Directory (Search, city filters, ratings)
+│   ├── #/booking       ➔ 3-Step Interactive Booking Form
+│   └── #/track         ➔ Live Repair Tracking & Payment Receipt Status
+├── Standalone Route
+│   └── #/admin/login   ➔ Secure Admin Authentication Portal (Protected Session)
+└── Protected AdminLayout (Sidebar + ProtectedRoute + Admin Outlet)
+    ├── #/admin/dashboard   ➔ Executive KPI Cards, Status Counters & Quick Actions
+    ├── #/admin/shops       ➔ Shop CRUD (Add, Edit, Toggle Active/Inactive, Delete)
+    ├── #/admin/bookings    ➔ Booking Table (Search, Status Filter, Remarks Slide-in Drawer)
+    ├── #/admin/customers   ➔ Customer Directory with Aggregated History
+    ├── #/admin/reports     ➔ Date-range Visual Analytics & CSV Data Export
+    └── #/admin/settings    ➔ LocalStorage Diagnostics, Seed Reset & Quotas</code></pre>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== MODULE DETAILS ==================== -->
+  <h1>4. Detailed Module Breakdown</h1>
+
+  <h2>4.1. The 3-Step Interactive Repair Booking Engine</h2>
+  <p>
+    The booking module (<code>src/pages/Booking.jsx</code>) allows customers to schedule their repairs seamlessly. The form includes strict client-side validation for:
+  </p>
+  <ul>
+    <li><strong>Customer Info:</strong> Full name, 10-digit Indian mobile number validation, and email.</li>
+    <li><strong>Jewellery Details:</strong> Selection from 11 jewellery classes (Gold Ring, Necklace, Bangles, Diamond Solitaire, etc.), repair category, and photo upload (max 2MB with live canvas preview).</li>
+    <li><strong>Artisan Shop & Appointment:</strong> Direct assignment to verified local partner workshops, appointment date restrictions (cannot select past dates), and preferred time slot selection.</li>
+  </ul>
+
+  <h2>4.2. Real UPI QR Code & Payment Escrow System</h2>
+  <p>
+    To ensure authentic business realism, GoldCare features a built-in Payment Modal (<code>src/components/PaymentModal.jsx</code>) that opens immediately after booking submission:
+  </p>
+  <ul>
+    <li><strong>Dynamic UPI QR Generator:</strong> Generates real scannable QR codes complying with the official NPCI UPI specifications:
+      <br><code>upi://pay?pa=goldcare.jewels@okhdfcbank&pn=GoldCare%20Jewels&am=500&cu=INR&tn=GC-2026-0001</code></li>
+    <li><strong>Custom Merchant Insignia:</strong> Features the GoldCare golden gem badge embedded directly in the center of the QR matrix, replicating merchant soundbox standees (Paytm/PhonePe).</li>
+    <li><strong>5-Minute Live Countdown Timer:</strong> Simulates gateway session timeout (<code>04:59</code> counting down per second).</li>
+    <li><strong>Payment Modes:</strong> Supports Advance Token (₹500), Full Estimated Amount, Debit/Credit Card, Net Banking (SBI, HDFC, ICICI, Axis), and Pay at Shop Counter.</li>
+    <li><strong>Official GST Invoice:</strong> Generates a printable Tax Receipt with a unique Transaction ID (e.g. <code>UPI/REF/984210</code>), printable directly using <code>window.print()</code>.</li>
+  </ul>
+
+  <h2>4.3. Real-Time Tracking & Pipeline Status</h2>
+  <p>
+    Customers can track any repair in real-time at <code>#/track</code> using their Booking ID and Mobile Number. The tracking dashboard displays:
+  </p>
+  <ul>
+    <li><strong>Progress Pipeline:</strong> Visual 4-step stepper (<code>Pending</code> ➔ <code>Confirmed</code> ➔ <code>In Progress</code> ➔ <code>Completed</code>).</li>
+    <li><strong>Artisan Notes:</strong> Live display of workshop remarks and estimated pickup times.</li>
+    <li><strong>Payment Status:</strong> Shows whether the booking is paid, advance settled, or due at counter, with a built-in "Pay Online" button for unpaid bookings.</li>
+  </ul>
+
+  <h2>4.4. Full-Featured Admin Back-Office</h2>
+  <p>
+    Secured by <code>ProtectedRoute.jsx</code>, the admin portal (<code>#/admin/login</code>) provides workshop administrators with complete operational control:
+  </p>
+  <ul>
+    <li><strong>Shop Management:</strong> Create, update, or deactivate repair centres across cities.</li>
+    <li><strong>Booking Drawer:</strong> Slide-in detail panel to update repair stages, record payments, and append customer remarks.</li>
+    <li><strong>CSV Export & Analytics:</strong> Filter reports by date and export full raw dataset to CSV via <code>exportCSV.js</code>.</li>
+  </ul>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== DATABASE SCHEMA ==================== -->
+  <h1>5. Data Models & LocalStorage Schema</h1>
+  <p>
+    The system utilizes four primary keys within browser <code>localStorage</code>, abstracted through a robust service layer (<code>src/services/localStorageService.js</code>):
+  </p>
+
+  <h3>1. Bookings Schema (Key: <code>goldcare_bookings</code>)</h3>
+  <pre><code>{
+  "id": "b-1729984920193",
+  "bookingId": "GC-2026-0001",
+  "customerName": "Aarav Patel",
+  "mobile": "9876543210",
+  "email": "aarav@example.com",
+  "jewelleryType": "Gold Ring",
+  "repairService": "Gold Ring Repair",
+  "shopId": "shop-001",
+  "shopName": "Raj Gold Works",
+  "description": "Band resizing from size 12 to 14, high-gloss polish",
+  "appointmentDate": "2026-11-05",
+  "appointmentTime": "10:00",
+  "budget": "1500",
+  "status": "In Progress",              // Pending | Confirmed | In Progress | Completed | Cancelled
+  "paymentStatus": "Paid",              // Pending | Paid | Pay at Counter
+  "paidAmount": 500,
+  "paymentMethod": "UPI QR Code",
+  "transactionId": "UPI/REF/8849204",
+  "adminRemarks": "Artisan has started resizing. Ready on Thursday.",
+  "createdAt": "2026-10-26T17:30:00.000Z",
+  "updatedAt": "2026-10-26T18:15:00.000Z"
+}</code></pre>
+
+  <h3>2. Shop Schema (Key: <code>goldcare_shops</code>)</h3>
+  <pre><code>{
+  "id": "shop-001",
+  "name": "Raj Gold Works",
+  "owner": "Rajesh Kumar",
+  "contact": "9876543210",
+  "city": "Mumbai",
+  "address": "12, MG Road, Near Bus Stand",
+  "services": ["Gold Ring Repair", "Polishing", "Stone Replacement"],
+  "openTime": "09:00",
+  "closeTime": "20:00",
+  "status": "active",                   // active | inactive
+  "rating": 4.8,
+  "reviews": 312
+}</code></pre>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECURITY & VALIDATION ==================== -->
+  <h1>6. Security, Validation & Business Logic</h1>
+  <ul>
+    <li><strong>Client-Side Validation Engine (<code>src/utils/validation.js</code>):</strong> Regex-based validation for 10-digit Indian phone numbers (<code>/^[6-9]\d{9}$/</code>), RFC email specifications, date boundaries (preventing past date selection), and image size enforcement (&le; 2MB).</li>
+    <li><strong>Authentication Guard (<code>ProtectedRoute.jsx</code>):</strong> Inspects <code>localStorage.getItem('goldcare_admin_session')</code> before rendering any admin layout. Unauthorized requests are automatically redirected to <code>#/admin/login</code>.</li>
+    <li><strong>Zero Server Attack Surface:</strong> Because there are no backend APIs, SQL databases, or server-side scripts, the application is inherently immune to SQL injection, remote code execution, or server denial-of-service vulnerabilities.</li>
+  </ul>
+
+  <!-- ==================== VERIFICATION & TESTING ==================== -->
+  <h2>7. Testing & Quality Assurance</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Test Scenario</th>
+        <th>Input / Action</th>
+        <th>Expected Result</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Form Validation</td>
+        <td>Submit booking with empty mobile & past date</td>
+        <td>Form displays error banners and scrolls to invalid input</td>
+        <td>Passed</td>
+      </tr>
+      <tr>
+        <td>UPI QR Generation</td>
+        <td>Submit valid repair form</td>
+        <td>Modal opens with live QR code, exact amount, and 5-min timer</td>
+        <td>Passed</td>
+      </tr>
+      <tr>
+        <td>Payment Persistence</td>
+        <td>Click "I Have Scanned & Paid"</td>
+        <td>Updates booking in LocalStorage; receipt renders with ref number</td>
+        <td>Passed</td>
+      </tr>
+      <tr>
+        <td>Repair Tracking</td>
+        <td>Search Booking ID + Mobile</td>
+        <td>Displays 4-step progress bar and matching payment badge</td>
+        <td>Passed</td>
+      </tr>
+      <tr>
+        <td>Admin Authorization</td>
+        <td>Direct access to <code>#/admin/dashboard</code> without login</td>
+        <td>Route intercepts and redirects to <code>#/admin/login</code></td>
+        <td>Passed</td>
+      </tr>
+      <tr>
+        <td>Static Deployment</td>
+        <td>Deploy to GitHub Pages with <code>base: '/GoldCare/'</code></td>
+        <td>Assets, routes, and styles load cleanly with 0 console errors</td>
+        <td>Passed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ==================== FUTURE SCOPE & CONCLUSION ==================== -->
+  <h2>8. Future Scope & Enhancements</h2>
+  <ol>
+    <li><strong>Cloud Database Synchronization:</strong> Integration with Firebase / Supabase for cross-device real-time sync across multiple physical stores.</li>
+    <li><strong>Automated WhatsApp Notifications:</strong> Webhook triggers to send booking confirmations and pickup alerts directly to customer WhatsApp numbers.</li>
+    <li><strong>Computer Vision Gemstone Scanner:</strong> Integration with camera APIs to analyze jewellery images and automatically estimate gold karatage and wear damage.</li>
+  </ol>
+
+  <h2>9. Conclusion</h2>
+  <p>
+    <strong>GoldCare</strong> demonstrates how modern frontend technologies (React 19, Tailwind CSS v4, and Vite) combined with thoughtful client-side state design can produce a sophisticated, commercially-viable web application without requiring expensive backend infrastructure. It provides a complete, polished solution for jewellery customers and craftsmen alike.
+  </p>
+
+</body>
+</html>
