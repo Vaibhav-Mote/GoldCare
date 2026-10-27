@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
   CreditCard,
-  QrCode,
   Building2,
   Banknote,
   CheckCircle2,
@@ -14,20 +13,27 @@ import {
   Copy,
   Check,
   Clock,
-  ExternalLink,
-  RefreshCw,
   Sparkles,
+  ArrowRight,
+  ExternalLink,
+  Edit2
 } from 'lucide-react';
 import { updateBooking } from '../services/localStorageService';
 
 export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
-  const [selectedMethod, setSelectedMethod] = useState('upi'); // 'upi' | 'card' | 'netbanking' | 'counter'
+  const [selectedMethod, setSelectedMethod] = useState('phonepe'); // 'phonepe' | 'card' | 'netbanking' | 'counter'
   const [paymentType, setPaymentType] = useState('advance'); // 'advance' | 'full'
-  
-  // Timer for QR code expiry
+
+  // Timer for payment session
   const [timeLeft, setTimeLeft] = useState(300); // 5 mins
   const [copiedUpi, setCopiedUpi] = useState(false);
   const [copiedTxn, setCopiedTxn] = useState(false);
+  const [hasTriggeredPhonePe, setHasTriggeredPhonePe] = useState(false);
+
+  // PhonePe & UPI credentials
+  const payeeName = 'vaibhavi haridash pathade';
+  const [merchantUpiId, setMerchantUpiId] = useState('8446763371@axl');
+  const [isEditingUpi, setIsEditingUpi] = useState(false);
 
   // Card & NetBanking forms
   const [cardNumber, setCardNumber] = useState('');
@@ -35,7 +41,6 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvv, setCardCvv] = useState('');
   const [selectedBank, setSelectedBank] = useState('HDFC Bank');
-  const [customUpiId, setCustomUpiId] = useState('');
 
   // Processing & Success
   const [isProcessing, setIsProcessing] = useState(false);
@@ -48,11 +53,10 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
     ? 0
     : (paymentType === 'full' ? budgetNum : advanceAmount);
 
-  const merchantUpiId = 'goldcare.jewels@okhdfcbank';
-  const upiIntentString = `upi://pay?pa=${merchantUpiId}&pn=GoldCare%20Jewellery%20Repair&am=${finalAmount}&cu=INR&tn=GC-${booking.bookingId}`;
-  
-  // Dynamic high-resolution QR code
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=12&format=svg&data=${encodeURIComponent(upiIntentString)}`;
+  // PhonePe direct application intent link
+  const phonePeIntentString = `phonepe://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(payeeName)}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent(`GoldCare-${booking.bookingId}`)}`;
+  // Universal UPI fallback intent link
+  const upiIntentString = `upi://pay?pa=${merchantUpiId}&pn=${encodeURIComponent(payeeName)}&am=${finalAmount}&cu=INR&tn=${encodeURIComponent(`GoldCare-${booking.bookingId}`)}`;
 
   useEffect(() => {
     if (paymentComplete || isProcessing) return;
@@ -82,6 +86,12 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
     }
   };
 
+  const handleOpenPhonePe = () => {
+    setHasTriggeredPhonePe(true);
+    // Trigger PhonePe deep link to directly open PhonePe app on mobile
+    window.location.href = phonePeIntentString;
+  };
+
   const handleCardNumberChange = (e) => {
     let val = e.target.value.replace(/\D/g, '').slice(0, 16);
     let formatted = val.replace(/(.{4})/g, '$1 ').trim();
@@ -102,9 +112,9 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
 
     setTimeout(() => {
       const now = new Date().toISOString();
-      const refNumber = `UPI/REF/${Date.now().toString().slice(-6)}${Math.floor(1000 + Math.random() * 9000)}`;
+      const refNumber = `PP/REF/${Date.now().toString().slice(-6)}${Math.floor(1000 + Math.random() * 9000)}`;
       const isCounter = selectedMethod === 'counter';
-      
+
       const paymentInfo = {
         paymentStatus: isCounter ? 'Pay at Counter' : 'Paid',
         paidAmount: isCounter ? 0 : finalAmount,
@@ -112,11 +122,12 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
         paymentType: isCounter ? 'Counter' : paymentType,
         paymentMethod: isCounter
           ? 'Pay at Counter / Shop (Cash or Card POS)'
-          : selectedMethod === 'upi'
-          ? 'UPI QR Code / Intent'
-          : selectedMethod === 'card'
-          ? 'Debit / Credit Card'
-          : `Net Banking (${selectedBank})`,
+          : selectedMethod === 'phonepe'
+            ? `PhonePe Direct UPI (${merchantUpiId})`
+            : selectedMethod === 'card'
+              ? 'Debit / Credit Card'
+              : `Net Banking (${selectedBank})`,
+        payeeName: payeeName,
         transactionId: isCounter ? 'N/A (Cash on Visit)' : refNumber,
         paidAt: now,
       };
@@ -129,13 +140,13 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
       if (onPaymentSuccess) {
         onPaymentSuccess({ ...booking, ...paymentInfo });
       }
-    }, 1600);
+    }, 1500);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-950/80 backdrop-blur-md overflow-y-auto">
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-amber-200 overflow-hidden my-4 sm:my-8 animate-fade-in-up">
-        
+
         {/* Gateway Header */}
         <div
           className="p-5 text-white relative"
@@ -166,6 +177,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
               <button
                 onClick={onClose}
                 className="p-1.5 rounded-full hover:bg-white/10 text-stone-300 hover:text-white transition-colors"
+                title="Close"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -178,7 +190,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
             </div>
             <div className="flex items-center gap-1">
               <Clock className="w-3.5 h-3.5 text-amber-400" />
-              <span>Expires in: </span>
+              <span>Session: </span>
               <span className="font-mono font-bold text-amber-300 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800/40">
                 {formatTimer(timeLeft)}
               </span>
@@ -204,11 +216,10 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                 <button
                   type="button"
                   onClick={() => setPaymentType('advance')}
-                  className={`p-3 rounded-2xl border text-left transition-all ${
-                    paymentType === 'advance'
-                      ? 'border-amber-600 bg-amber-50/80 ring-2 ring-amber-500/50 shadow-sm'
-                      : 'border-stone-200 hover:border-amber-300 bg-stone-50/60'
-                  }`}
+                  className={`p-3 rounded-2xl border text-left transition-all ${paymentType === 'advance'
+                    ? 'border-amber-600 bg-amber-50/80 ring-2 ring-amber-500/50 shadow-sm'
+                    : 'border-stone-200 hover:border-amber-300 bg-stone-50/60'
+                    }`}
                 >
                   <div className="flex justify-between items-center mb-0.5">
                     <span className="text-xs font-bold text-stone-800">Advance Deposit</span>
@@ -224,11 +235,10 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                 <button
                   type="button"
                   onClick={() => setPaymentType('full')}
-                  className={`p-3 rounded-2xl border text-left transition-all ${
-                    paymentType === 'full'
-                      ? 'border-amber-600 bg-amber-50/80 ring-2 ring-amber-500/50 shadow-sm'
-                      : 'border-stone-200 hover:border-amber-300 bg-stone-50/60'
-                  }`}
+                  className={`p-3 rounded-2xl border text-left transition-all ${paymentType === 'full'
+                    ? 'border-amber-600 bg-amber-50/80 ring-2 ring-amber-500/50 shadow-sm'
+                    : 'border-stone-200 hover:border-amber-300 bg-stone-50/60'
+                    }`}
                 >
                   <div className="flex justify-between items-center mb-0.5">
                     <span className="text-xs font-bold text-stone-800">Full Amount</span>
@@ -247,7 +257,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
             <div>
               <div className="flex rounded-2xl bg-stone-100 p-1 border border-stone-200">
                 {[
-                  { id: 'upi', label: 'UPI QR Code', icon: QrCode },
+                  { id: 'phonepe', label: 'PhonePe', icon: Smartphone },
                   { id: 'card', label: 'Card', icon: CreditCard },
                   { id: 'netbanking', label: 'NetBank', icon: Building2 },
                   { id: 'counter', label: 'Pay at Shop', icon: Banknote },
@@ -256,11 +266,10 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                     key={id}
                     type="button"
                     onClick={() => setSelectedMethod(id)}
-                    className={`flex-1 py-2 px-1 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
-                      selectedMethod === id
-                        ? 'bg-white text-amber-800 shadow-sm font-bold border border-amber-200'
-                        : 'text-stone-600 hover:text-stone-900'
-                    }`}
+                    className={`flex-1 py-2 px-1 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${selectedMethod === id
+                      ? 'bg-white text-purple-900 shadow-sm font-bold border border-purple-200'
+                      : 'text-stone-600 hover:text-stone-900'
+                      }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
                     <span>{label}</span>
@@ -269,98 +278,131 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
               </div>
             </div>
 
-            {/* TAB 1: REAL PROPER UPI QR CODE EXPERIENCE */}
-            {selectedMethod === 'upi' && (
+            {/* TAB 1: DIRECT PHONEPE PAYMENT (NO QR CODE) */}
+            {selectedMethod === 'phonepe' && (
               <div className="space-y-4 animate-fade-in">
-                
-                {/* Real QR Container styled like official UPI merchant standee */}
-                <div className="bg-gradient-to-b from-amber-50/60 to-orange-50/40 rounded-3xl p-5 border border-amber-200 text-center relative shadow-sm">
-                  
-                  {/* Merchant Badge Header */}
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <span className="text-xs font-semibold text-stone-700">Merchant:</span>
-                    <span className="text-xs font-bold text-stone-900">GoldCare Fine Jewels Pvt Ltd</span>
-                  </div>
 
-                  {/* QR Code with Center Jewel Badge */}
-                  <div className="relative inline-block mx-auto bg-white p-3 rounded-2xl shadow-md border-2 border-amber-300">
-                    <img
-                      src={qrCodeUrl}
-                      alt="UPI QR Code"
-                      className="w-52 h-52 sm:w-56 sm:h-56 object-contain block mx-auto rounded-lg"
-                    />
-                    
-                    {/* Center Overlay Logo */}
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <div className="w-11 h-11 rounded-xl bg-white border-2 border-amber-500 shadow-lg flex items-center justify-center p-1">
-                        <div
-                          className="w-full h-full rounded-lg flex items-center justify-center"
-                          style={{ background: 'linear-gradient(135deg, #b45309, #f59e0b)' }}
-                        >
-                          <Gem className="w-5 h-5 text-white" />
+                {/* PhonePe Branded Card Container */}
+                <div className="bg-gradient-to-br from-purple-50 via-indigo-50/40 to-amber-50/50 rounded-3xl p-5 border border-purple-200 shadow-sm relative overflow-hidden">
+
+                  {/* Subtle decorative purple glow */}
+                  <div className="absolute -top-12 -right-12 w-32 h-32 rounded-full bg-purple-500/10 blur-2xl pointer-events-none" />
+
+                  {/* Header: PhonePe Badge & Verified Payee */}
+                  <div className="flex items-center justify-between pb-3 border-b border-purple-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#5f259f] to-[#7b2cbf] text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                        पे
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-bold text-stone-900">PhonePe Direct Pay</span>
+                          <span className="text-[10px] bg-purple-100 text-purple-800 font-semibold px-2 py-0.2 rounded-full border border-purple-200">
+                            Instant UPI
+                          </span>
                         </div>
+                        <p className="text-[11px] text-stone-500">Opens directly in PhonePe application</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Amount display */}
-                  <div className="mt-3">
-                    <p className="text-xs text-stone-500">Scan to pay exact amount</p>
-                    <p className="text-2xl font-extrabold text-stone-900 tracking-tight font-sans">
-                      ₹{finalAmount}
-                    </p>
-                  </div>
+                  {/* Payee Details Panel */}
+                  <div className="mt-4 bg-white/90 backdrop-blur-xs rounded-2xl p-4 border border-purple-100/80 shadow-xs space-y-3">
 
-                  {/* Accepted UPI Apps logos */}
-                  <div className="mt-3 pt-3 border-t border-amber-200/60 flex items-center justify-center gap-2 flex-wrap">
-                    <span className="text-[10px] text-stone-500 font-medium">Accepted Apps:</span>
-                    {['Google Pay', 'PhonePe', 'Paytm', 'BHIM UPI', 'Cred'].map((app) => (
-                      <span
-                        key={app}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white text-stone-700 border border-stone-200 shadow-2xs"
-                      >
-                        {app}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* UPI VPA Copy Bar */}
-                  <div className="mt-3 flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-amber-200 text-xs">
-                    <div className="text-left">
-                      <span className="text-[10px] text-stone-400 block leading-tight">UPI ID (VPA)</span>
-                      <span className="font-mono font-semibold text-stone-800 text-[11px] sm:text-xs">
-                        {merchantUpiId}
+                    {/* Payee Name */}
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-stone-500 font-medium">Payee Name:</span>
+                      <span className="font-bold text-stone-900 flex items-center gap-1 bg-purple-50 text-purple-950 px-2.5 py-1 rounded-lg border border-purple-100">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        {payeeName}
                       </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={handleCopyUpi}
-                      className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 hover:text-amber-800 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-lg border border-amber-200 transition-colors"
-                    >
-                      {copiedUpi ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-emerald-600" /> Copied!
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" /> Copy
-                        </>
-                      )}
-                    </button>
+
+                    {/* UPI ID (VPA) with Copy and Edit Option */}
+                    <div className="flex items-center justify-between text-xs pt-1">
+                      <div className="text-left">
+                        <span className="text-stone-500 font-medium block">PhonePe UPI ID:</span>
+                        {!isEditingUpi ? (
+                          <span className="font-mono font-bold text-purple-900 text-xs sm:text-sm">
+                            {merchantUpiId}
+                          </span>
+                        ) : (
+                          <input
+                            type="text"
+                            value={merchantUpiId}
+                            onChange={(e) => setMerchantUpiId(e.target.value)}
+                            className="font-mono text-xs px-2 py-1 border border-purple-300 rounded-md text-stone-800 focus:outline-none focus:ring-1 focus:ring-purple-500"
+                            placeholder="username@ybl"
+                          />
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setIsEditingUpi(!isEditingUpi)}
+                          className="p-1.5 rounded-lg text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors"
+                          title={isEditingUpi ? "Save UPI ID" : "Edit UPI ID"}
+                        >
+                          {isEditingUpi ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Edit2 className="w-3.5 h-3.5" />}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleCopyUpi}
+                          className="flex items-center gap-1 text-[11px] font-semibold text-purple-800 hover:text-purple-950 bg-purple-50 hover:bg-purple-100 px-2.5 py-1.5 rounded-lg border border-purple-200 transition-colors"
+                          title="Copy UPI ID"
+                        >
+                          {copiedUpi ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-600" /> Copied!
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5" /> Copy
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Payable Amount Highlight */}
+                    <div className="pt-2 border-t border-purple-100 flex items-center justify-between">
+                      <span className="text-xs text-stone-600 font-semibold">Total Payable:</span>
+                      <span className="text-xl font-extrabold text-purple-950 font-sans">
+                        ₹{finalAmount}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Mobile Direct Pay Button (UPI Intent) */}
-                  <div className="mt-2 text-center">
+                  {/* Primary Direct Pay Button that opens PhonePe App directly */}
+                  <div className="mt-4">
+                    <a
+                      href={phonePeIntentString}
+                      onClick={handleOpenPhonePe}
+                      className="w-full py-3.5 px-4 rounded-2xl text-white font-bold flex items-center justify-center gap-2 text-sm shadow-md transition-all hover:shadow-lg active:scale-[0.98]"
+                      style={{ background: 'linear-gradient(135deg, #5f259f 0%, #7b2cbf 100%)' }}
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      <span>Open & Pay ₹{finalAmount} on PhonePe</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  </div>
+
+                  {/* Fallback Intent Options for other UPI apps or web */}
+                  <div className="mt-3 pt-3 border-t border-purple-100/70 flex items-center justify-center gap-3 text-xs">
+                    <span className="text-stone-400 text-[11px]">Other UPI app?</span>
                     <a
                       href={upiIntentString}
-                      className="inline-flex items-center gap-1 text-xs text-amber-700 hover:text-amber-800 font-semibold underline"
+                      onClick={() => setHasTriggeredPhonePe(true)}
+                      className="inline-flex items-center gap-1 text-purple-700 hover:text-purple-900 font-semibold underline text-[11px]"
                     >
-                      <Smartphone className="w-3.5 h-3.5" /> Tap here to launch UPI app directly on mobile
+                      <ExternalLink className="w-3 h-3" /> Pay via GPay / Paytm / BHIM
                     </a>
                   </div>
                 </div>
 
-                {/* Simulate Scanned & Paid Button */}
+                {/* Confirm Payment Completion Button */}
                 <button
                   type="button"
                   onClick={handleProcessPayment}
@@ -370,12 +412,16 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                   {isProcessing ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Verifying UPI Payment with Bank...</span>
+                      <span>Verifying Payment with Bank...</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-4 h-4 text-amber-200" />
-                      <span>I Have Scanned & Paid ₹{finalAmount}</span>
+                      <span>
+                        {hasTriggeredPhonePe
+                          ? `I Have Completed Payment of ₹${finalAmount}`
+                          : `Confirm Paid ₹${finalAmount} to ${payeeName}`}
+                      </span>
                     </>
                   )}
                 </button>
@@ -481,11 +527,10 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                         key={bank}
                         type="button"
                         onClick={() => setSelectedBank(bank)}
-                        className={`py-2.5 px-2 rounded-xl text-xs font-medium border text-center transition-all ${
-                          selectedBank === bank
-                            ? 'bg-amber-700 text-white border-amber-700 shadow-sm font-bold'
-                            : 'bg-white text-stone-700 border-stone-200 hover:border-amber-300'
-                        }`}
+                        className={`py-2.5 px-2 rounded-xl text-xs font-medium border text-center transition-all ${selectedBank === bank
+                          ? 'bg-amber-700 text-white border-amber-700 shadow-sm font-bold'
+                          : 'bg-white text-stone-700 border-stone-200 hover:border-amber-300'
+                          }`}
                       >
                         {bank}
                       </button>
@@ -524,7 +569,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                   <p className="leading-relaxed">
                     You can pay the full amount of <strong>₹{budgetNum}</strong> directly at{' '}
                     <strong className="text-amber-950">{booking.shopName}</strong> on your appointment date (
-                    {booking.appointmentDate}) via Cash, UPI QR at counter, or Credit/Debit POS card.
+                    {booking.appointmentDate}) via Cash, PhonePe / UPI at counter, or Credit/Debit POS card.
                   </p>
                   <p className="text-[11px] text-stone-500">
                     No money is deducted online now. Your appointment is confirmed and reserved.
@@ -594,7 +639,7 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
 
               {paymentResult?.transactionId !== 'N/A (Cash on Visit)' && (
                 <div className="flex justify-between items-center">
-                  <span className="text-stone-500">UPI / Bank Ref No.</span>
+                  <span className="text-stone-500">Transaction Ref No.</span>
                   <div className="flex items-center gap-1">
                     <span className="font-mono font-bold text-amber-700">{paymentResult?.transactionId}</span>
                     <button
@@ -605,6 +650,13 @@ export default function PaymentModal({ booking, onClose, onPaymentSuccess }) {
                       {copiedTxn ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
+                </div>
+              )}
+
+              {paymentResult?.payeeName && (
+                <div className="flex justify-between">
+                  <span className="text-stone-500">Payee</span>
+                  <span className="font-semibold text-stone-800">{paymentResult?.payeeName}</span>
                 </div>
               )}
 
