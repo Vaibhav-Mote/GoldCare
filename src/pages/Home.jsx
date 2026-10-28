@@ -550,16 +550,16 @@ export default function Home() {
           </div>
 
           {/* Deals Grid Cards (Amazon product cards look & feel) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5">
             {filteredDeals.map((deal) => (
               <div
                 key={deal.id}
-                className="group bg-white rounded-2xl border border-stone-200 hover:border-amber-400 p-3 flex flex-col justify-between transition-all hover:shadow-lg hover:-translate-y-1 relative"
+                className="group bg-white rounded-2xl border border-stone-200 hover:border-amber-400 p-2.5 sm:p-3 flex flex-col justify-between transition-all hover:shadow-lg hover:-translate-y-1 relative"
               >
                 {/* Discount Badge */}
                 {!deal.hasEmbeddedBadges && (
-                  <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
-                    <span className="bg-rose-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-xs">
+                  <div className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 z-10 pointer-events-none">
+                    <span className="bg-rose-600 text-white text-[9px] sm:text-[10px] font-extrabold px-1.5 sm:px-2 py-0.5 rounded shadow-xs">
                       {deal.discount}
                     </span>
                   </div>
@@ -567,8 +567,8 @@ export default function Home() {
 
                 {/* Turnaround Tag */}
                 {!deal.hasEmbeddedBadges && (
-                  <div className="absolute top-2.5 right-2.5 z-10 pointer-events-none">
-                    <span className="bg-stone-900/80 text-amber-300 text-[9px] font-bold px-1.5 py-0.5 rounded-md backdrop-blur-xs flex items-center gap-0.5">
+                  <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-10 pointer-events-none">
+                    <span className="bg-stone-900/80 text-amber-300 text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded backdrop-blur-xs flex items-center gap-0.5">
                       <Clock className="w-2.5 h-2.5" /> {deal.turnaround}
                     </span>
                   </div>
@@ -578,7 +578,7 @@ export default function Home() {
                   {/* Icon / Image Placeholder Box */}
                   <Link
                     to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
-                    className="h-32 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 flex items-center justify-center text-5xl mb-2.5 group-hover:scale-105 transition-transform overflow-hidden relative block"
+                    className="h-36 sm:h-36 lg:h-32 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 flex items-center justify-center text-5xl mb-2 sm:mb-2.5 group-hover:scale-105 transition-transform overflow-hidden relative block"
                   >
                     {deal.image ? (
                       <img
@@ -593,41 +593,41 @@ export default function Home() {
                   </Link>
 
                   {/* Title & Category */}
-                    <Link
-                      to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
-                      className="font-bold text-stone-900 text-xs line-clamp-2 leading-snug mb-1 hover:text-amber-600 transition-colors block"
-                    >
-                      {deal.title}
-                </Link>
+                  <Link
+                    to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
+                    className="font-bold text-stone-900 text-xs line-clamp-2 leading-snug mb-1 hover:text-amber-600 transition-colors block"
+                  >
+                    {deal.title}
+                  </Link>
 
-                {/* Star Rating & Assured Badge */}
-                <div className="flex items-center gap-1.5 mb-2">
-                  <span className="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
-                    {deal.rating} <Star className="w-2.5 h-2.5 fill-white" />
-                  </span>
-                  <span className="text-[10px] text-stone-400">({deal.reviews})</span>
-                  {deal.isAssured && (
-                    <span className="text-[9px] bg-amber-100 text-amber-800 font-bold px-1 rounded border border-amber-200">
-                      Assured
+                  {/* Star Rating & Assured Badge */}
+                  <div className="flex items-center gap-1 sm:gap-1.5 mb-1.5 sm:mb-2">
+                    <span className="bg-emerald-700 text-white text-[9px] sm:text-[10px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
+                      {deal.rating} <Star className="w-2.5 h-2.5 fill-white" />
                     </span>
-                  )}
+                    <span className="text-[9px] sm:text-[10px] text-stone-400">({deal.reviews})</span>
+                    {deal.isAssured && (
+                      <span className="text-[8px] sm:text-[9px] bg-amber-100 text-amber-800 font-bold px-1 rounded border border-amber-200">
+                        Assured
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-                {/* Price Block & Action Button */ }
-              < div className = "pt-2 border-t border-stone-100" >
-              <div className="flex items-baseline gap-1.5 mb-2">
-                <span className="text-base font-extrabold text-stone-900 font-sans">
-                  ₹{deal.dealPrice}
-                </span>
-                <span className="text-xs text-stone-400 line-through">
-                  ₹{deal.originalPrice}
-                </span>
-              </div>
+                {/* Price Block & Action Button */}
+                <div className="pt-2 border-t border-stone-100">
+                  <div className="flex items-baseline gap-1.5 mb-1.5 sm:mb-2">
+                    <span className="text-sm sm:text-base font-extrabold text-stone-900 font-sans">
+                      ₹{deal.dealPrice}
+                    </span>
+                    <span className="text-[10px] sm:text-xs text-stone-400 line-through">
+                      ₹{deal.originalPrice}
+                    </span>
+                  </div>
 
-                  {/* Claimed progress bar (Amazon Lightning Deal progress) */ }
-              < div className = "mb-2.5" >
-                    <div className="flex justify-between text-[9px] text-stone-500 mb-0.5 font-medium">
+                  {/* Claimed progress bar (Amazon Lightning Deal progress) */}
+                  <div className="mb-2 sm:mb-2.5">
+                    <div className="flex justify-between text-[8px] sm:text-[9px] text-stone-500 mb-0.5 font-medium">
                       <span>Claimed: {deal.claimed}%</span>
                       <span className="text-red-600 font-bold">Limited Slots</span>
                     </div>
@@ -639,14 +639,14 @@ export default function Home() {
                     </div>
                   </div>
 
-          <Link
-            to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
-            className="w-full py-2 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl text-center block transition-all shadow-xs hover:shadow"
-          >
-            Book Deal
-          </Link>
-        </div>
-      </div>
+                  <Link
+                    to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
+                    className="w-full py-1.5 sm:py-2 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl text-center block transition-all shadow-xs hover:shadow"
+                  >
+                    Book Deal
+                  </Link>
+                </div>
+              </div>
             ))}
     </div>
         </div >
