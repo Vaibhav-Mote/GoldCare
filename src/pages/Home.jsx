@@ -28,6 +28,9 @@ import {
   PackageCheck
 } from 'lucide-react';
 import { getShops } from '../services/localStorageService';
+import ringResizeImg from '../assets/deals/ring-resizing.jpg';
+import chainSolderImg from '../assets/deals/chain-soldering.jpg';
+import diamondSettingImg from '../assets/deals/diamond-setting.jpg';
 
 // Flipkart/Amazon Style Top Category Bubble Icons
 const QUICK_CATEGORIES = [
@@ -103,6 +106,8 @@ const LIGHTNING_DEALS = [
     claimed: 78,
     badge: 'Deal of the Day',
     isAssured: true,
+    image: ringResizeImg,
+    hasEmbeddedBadges: true,
     imageIcon: '💍',
     turnaround: '2 Hours'
   },
@@ -119,6 +124,7 @@ const LIGHTNING_DEALS = [
     claimed: 92,
     badge: 'Lightning Deal',
     isAssured: true,
+    image: chainSolderImg,
     imageIcon: '⛓️',
     turnaround: 'Same Day'
   },
@@ -135,6 +141,7 @@ const LIGHTNING_DEALS = [
     claimed: 64,
     badge: 'Best Seller',
     isAssured: true,
+    image: diamondSettingImg,
     imageIcon: '💎',
     turnaround: '24 Hours'
   },
@@ -246,7 +253,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeTab, setActiveTab] = useState('all');
-  
+
   // Amazon/Flipkart Lightning Deals Live Timer (Countdown)
   const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 42, seconds: 19 });
 
@@ -288,13 +295,13 @@ export default function Home() {
 
   return (
     <div className="bg-[#f1f3f6] min-h-screen text-stone-800 pb-16 font-sans">
-      
+
       {/* 1. AMAZON / FLIPKART STYLE TOP SUB-NAV SEARCH BAR */}
       <div className="bg-gradient-to-r from-[#1a0e00] via-[#2b1704] to-[#1a0e00] pt-20 pb-4 px-4 sm:px-6 shadow-md border-b border-amber-900/40 text-white">
         <div className="max-w-7xl mx-auto space-y-3">
-          
+
           <div className="flex flex-col md:flex-row items-center gap-3">
-            
+
             {/* Delivery Location Pincode (Amazon 'Deliver to' style) */}
             <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 cursor-pointer border border-amber-500/20 text-xs shrink-0 transition-colors">
               <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
@@ -367,7 +374,7 @@ export default function Home() {
       </div>
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-3 space-y-4">
-        
+
         {/* 2. FLIPKART STYLE TOP ROUNDED CATEGORY STRIP */}
         <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-stone-200/80 overflow-x-auto no-scrollbar">
           <div className="flex items-center justify-between min-w-[760px] gap-2">
@@ -377,9 +384,8 @@ export default function Home() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveTab(cat.id)}
-                  className={`flex flex-col items-center group transition-all p-2 rounded-xl text-center flex-1 ${
-                    isSelected ? 'bg-amber-50/80 ring-2 ring-amber-500/50' : 'hover:bg-stone-50'
-                  }`}
+                  className={`flex flex-col items-center group transition-all p-2 rounded-xl text-center flex-1 ${isSelected ? 'bg-amber-50/80 ring-2 ring-amber-500/50' : 'hover:bg-stone-50'
+                    }`}
                 >
                   <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 border border-amber-200 shadow-2xs flex items-center justify-center text-2xl group-hover:scale-110 transition-transform mb-1.5">
                     {cat.icon}
@@ -404,9 +410,8 @@ export default function Home() {
               return (
                 <div
                   key={slide.id}
-                  className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} p-6 sm:p-10 md:p-14 flex items-center justify-between transition-opacity duration-700 ${
-                    isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-                  }`}
+                  className={`absolute inset-0 bg-gradient-to-r ${slide.bgGradient} p-6 sm:p-10 md:p-14 flex items-center justify-between transition-opacity duration-700 ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+                    }`}
                 >
                   {/* Decorative background circle */}
                   <div className="absolute right-10 top-0 bottom-0 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none" />
@@ -491,9 +496,8 @@ export default function Home() {
                 <button
                   key={i}
                   onClick={() => setCurrentSlide(i)}
-                  className={`h-2 rounded-full transition-all ${
-                    currentSlide === i ? 'w-8 bg-amber-400' : 'w-2 bg-white/40 hover:bg-white/70'
-                  }`}
+                  className={`h-2 rounded-full transition-all ${currentSlide === i ? 'w-8 bg-amber-400' : 'w-2 bg-white/40 hover:bg-white/70'
+                    }`}
                 />
               ))}
             </div>
@@ -502,7 +506,7 @@ export default function Home() {
 
         {/* 4. FLIPKART / AMAZON LIGHTNING "DEALS OF THE DAY" WITH COUNTDOWN TIMER */}
         <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-stone-200 space-y-4">
-          
+
           {/* Section Header: Timer + See All Link */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-stone-200">
             <div className="flex items-center gap-3 flex-wrap">
@@ -553,57 +557,76 @@ export default function Home() {
                 className="group bg-white rounded-2xl border border-stone-200 hover:border-amber-400 p-3 flex flex-col justify-between transition-all hover:shadow-lg hover:-translate-y-1 relative"
               >
                 {/* Discount Badge */}
-                <div className="absolute top-2.5 left-2.5 z-10">
-                  <span className="bg-rose-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-xs">
-                    {deal.discount}
-                  </span>
-                </div>
+                {!deal.hasEmbeddedBadges && (
+                  <div className="absolute top-2.5 left-2.5 z-10 pointer-events-none">
+                    <span className="bg-rose-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-xs">
+                      {deal.discount}
+                    </span>
+                  </div>
+                )}
 
                 {/* Turnaround Tag */}
-                <div className="absolute top-2.5 right-2.5 z-10">
-                  <span className="bg-stone-900/80 text-amber-300 text-[9px] font-bold px-1.5 py-0.5 rounded-md backdrop-blur-xs flex items-center gap-0.5">
-                    <Clock className="w-2.5 h-2.5" /> {deal.turnaround}
-                  </span>
-                </div>
+                {!deal.hasEmbeddedBadges && (
+                  <div className="absolute top-2.5 right-2.5 z-10 pointer-events-none">
+                    <span className="bg-stone-900/80 text-amber-300 text-[9px] font-bold px-1.5 py-0.5 rounded-md backdrop-blur-xs flex items-center gap-0.5">
+                      <Clock className="w-2.5 h-2.5" /> {deal.turnaround}
+                    </span>
+                  </div>
+                )}
 
                 <div>
                   {/* Icon / Image Placeholder Box */}
-                  <div className="h-32 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 flex items-center justify-center text-5xl mb-2.5 group-hover:scale-105 transition-transform">
-                    {deal.imageIcon}
-                  </div>
+                  <Link
+                    to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
+                    className="h-32 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 flex items-center justify-center text-5xl mb-2.5 group-hover:scale-105 transition-transform overflow-hidden relative block"
+                  >
+                    {deal.image ? (
+                      <img
+                        src={deal.image}
+                        alt={deal.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
+                      />
+                    ) : (
+                      deal.imageIcon
+                    )}
+                  </Link>
 
                   {/* Title & Category */}
-                  <h3 className="font-bold text-stone-900 text-xs line-clamp-2 leading-snug mb-1">
-                    {deal.title}
-                  </h3>
+                    <Link
+                      to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
+                      className="font-bold text-stone-900 text-xs line-clamp-2 leading-snug mb-1 hover:text-amber-600 transition-colors block"
+                    >
+                      {deal.title}
+                </Link>
 
-                  {/* Star Rating & Assured Badge */}
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <span className="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
-                      {deal.rating} <Star className="w-2.5 h-2.5 fill-white" />
+                {/* Star Rating & Assured Badge */}
+                <div className="flex items-center gap-1.5 mb-2">
+                  <span className="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
+                    {deal.rating} <Star className="w-2.5 h-2.5 fill-white" />
+                  </span>
+                  <span className="text-[10px] text-stone-400">({deal.reviews})</span>
+                  {deal.isAssured && (
+                    <span className="text-[9px] bg-amber-100 text-amber-800 font-bold px-1 rounded border border-amber-200">
+                      Assured
                     </span>
-                    <span className="text-[10px] text-stone-400">({deal.reviews})</span>
-                    {deal.isAssured && (
-                      <span className="text-[9px] bg-amber-100 text-amber-800 font-bold px-1 rounded border border-amber-200">
-                        Assured
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </div>
+              </div>
 
-                {/* Price Block & Action Button */}
-                <div className="pt-2 border-t border-stone-100">
-                  <div className="flex items-baseline gap-1.5 mb-2">
-                    <span className="text-base font-extrabold text-stone-900 font-sans">
-                      ₹{deal.dealPrice}
-                    </span>
-                    <span className="text-xs text-stone-400 line-through">
-                      ₹{deal.originalPrice}
-                    </span>
-                  </div>
+                {/* Price Block & Action Button */ }
+              < div className = "pt-2 border-t border-stone-100" >
+              <div className="flex items-baseline gap-1.5 mb-2">
+                <span className="text-base font-extrabold text-stone-900 font-sans">
+                  ₹{deal.dealPrice}
+                </span>
+                <span className="text-xs text-stone-400 line-through">
+                  ₹{deal.originalPrice}
+                </span>
+              </div>
 
-                  {/* Claimed progress bar (Amazon Lightning Deal progress) */}
-                  <div className="mb-2.5">
+                  {/* Claimed progress bar (Amazon Lightning Deal progress) */ }
+              < div className = "mb-2.5" >
                     <div className="flex justify-between text-[9px] text-stone-500 mb-0.5 font-medium">
                       <span>Claimed: {deal.claimed}%</span>
                       <span className="text-red-600 font-bold">Limited Slots</span>
@@ -616,214 +639,218 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <Link
-                    to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
-                    className="w-full py-2 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl text-center block transition-all shadow-xs hover:shadow"
-                  >
-                    Book Deal
-                  </Link>
-                </div>
-              </div>
+          <Link
+            to={`/booking?service=${encodeURIComponent(deal.serviceKey)}`}
+            className="w-full py-2 bg-amber-500 hover:bg-amber-600 text-stone-950 font-bold text-xs rounded-xl text-center block transition-all shadow-xs hover:shadow"
+          >
+            Book Deal
+          </Link>
+        </div>
+      </div>
             ))}
+    </div>
+        </div >
+
+    {/* 5. AMAZON 4-IN-1 QUAD GRID CARDS (Signature Amazon Desktop UI) */ }
+    < div className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" >
+    {
+      QUAD_CARDS.map((quad) => (
+        <div
+          key={quad.title}
+          className="bg-white rounded-3xl p-5 shadow-sm border border-stone-200 flex flex-col justify-between"
+        >
+          <div>
+            <h3 className="text-base font-extrabold text-stone-900 leading-tight">
+              {quad.title}
+            </h3>
+            <p className="text-xs text-stone-400 mb-3">{quad.subtitle}</p>
+
+            {/* 2x2 Inner Mini Cards */}
+            <div className="grid grid-cols-2 gap-2.5">
+              {quad.items.map((item) => (
+                <Link
+                  key={item.name}
+                  to={quad.linkTo}
+                  className="group p-2.5 rounded-2xl bg-stone-50 hover:bg-amber-50/70 border border-stone-200/80 hover:border-amber-300 transition-all text-left flex flex-col justify-between"
+                >
+                  <div className="w-9 h-9 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-xl mb-1.5 shadow-2xs group-hover:scale-105 transition-transform">
+                    {item.icon}
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-stone-800 line-clamp-1 block">
+                      {item.name}
+                    </span>
+                    <span className="text-[10px] text-amber-700 font-semibold block">
+                      {item.price}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
+
+          {/* Bottom Card Link */}
+          <Link
+            to={quad.linkTo}
+            className="mt-4 pt-3 border-t border-stone-100 text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1"
+          >
+            <span>{quad.linkText}</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      ))
+    }
+        </div >
+
+    {/* 6. VERIFIED PARTNER SHOPS (Marketplace Sellers Grid) */ }
+  {
+    shops.length > 0 && (
+      <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200 space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-stone-200">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg sm:text-xl font-extrabold text-stone-900 tracking-tight">
+                Top Verified Jewellery Workshops Near You
+              </h2>
+              <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                Live Status
+              </span>
+            </div>
+            <p className="text-xs text-stone-500">
+              Government BIS Hallmarked and equipped with advanced laser soldering workstations
+            </p>
+          </div>
+
+          <Link
+            to="/shops"
+            className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1"
+          >
+            <span>Explore All Shops</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
 
-        {/* 5. AMAZON 4-IN-1 QUAD GRID CARDS (Signature Amazon Desktop UI) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {QUAD_CARDS.map((quad) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {shops.map((shop) => (
             <div
-              key={quad.title}
-              className="bg-white rounded-3xl p-5 shadow-sm border border-stone-200 flex flex-col justify-between"
+              key={shop.id}
+              className="bg-stone-50/70 rounded-2xl border border-stone-200 hover:border-amber-300 p-4 flex flex-col justify-between transition-all hover:shadow-md"
             >
               <div>
-                <h3 className="text-base font-extrabold text-stone-900 leading-tight">
-                  {quad.title}
-                </h3>
-                <p className="text-xs text-stone-400 mb-3">{quad.subtitle}</p>
+                <div className="flex items-start justify-between mb-2">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center text-xl shadow-2xs">
+                    🏪
+                  </div>
+                  <span className="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                    Open Now
+                  </span>
+                </div>
 
-                {/* 2x2 Inner Mini Cards */}
-                <div className="grid grid-cols-2 gap-2.5">
-                  {quad.items.map((item) => (
-                    <Link
-                      key={item.name}
-                      to={quad.linkTo}
-                      className="group p-2.5 rounded-2xl bg-stone-50 hover:bg-amber-50/70 border border-stone-200/80 hover:border-amber-300 transition-all text-left flex flex-col justify-between"
-                    >
-                      <div className="w-9 h-9 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-xl mb-1.5 shadow-2xs group-hover:scale-105 transition-transform">
-                        {item.icon}
-                      </div>
-                      <div>
-                        <span className="text-[11px] font-bold text-stone-800 line-clamp-1 block">
-                          {item.name}
-                        </span>
-                        <span className="text-[10px] text-amber-700 font-semibold block">
-                          {item.price}
-                        </span>
-                      </div>
-                    </Link>
+                <h3 className="font-bold text-stone-900 text-sm mb-1">{shop.name}</h3>
+
+                <div className="flex items-center gap-1 mb-2">
+                  <span className="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
+                    {shop.rating || '4.8'} <Star className="w-2.5 h-2.5 fill-white" />
+                  </span>
+                  <span className="text-[11px] text-stone-500">
+                    • Verified Artisan
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1 text-xs text-stone-500 mb-3">
+                  <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span className="line-clamp-1">{shop.city}, {shop.state}</span>
+                </div>
+
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {(shop.services || []).slice(0, 2).map((svc) => (
+                    <span key={svc} className="text-[10px] bg-white text-stone-700 px-2 py-0.5 rounded-md border border-stone-200">
+                      {svc}
+                    </span>
                   ))}
                 </div>
               </div>
 
-              {/* Bottom Card Link */}
               <Link
-                to={quad.linkTo}
-                className="mt-4 pt-3 border-t border-stone-100 text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1"
+                to="/booking"
+                className="w-full py-2 bg-stone-900 hover:bg-amber-700 text-white text-xs font-bold rounded-xl text-center block transition-colors"
               >
-                <span>{quad.linkText}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
+                Select Artisan
               </Link>
             </div>
           ))}
         </div>
+      </div>
+    )
+  }
 
-        {/* 6. VERIFIED PARTNER SHOPS (Marketplace Sellers Grid) */}
-        {shops.length > 0 && (
-          <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-sm border border-stone-200 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-200">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="text-lg sm:text-xl font-extrabold text-stone-900 tracking-tight">
-                    Top Verified Jewellery Workshops Near You
-                  </h2>
-                  <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
-                    Live Status
-                  </span>
-                </div>
-                <p className="text-xs text-stone-500">
-                  Government BIS Hallmarked and equipped with advanced laser soldering workstations
-                </p>
-              </div>
+  {/* 7. AMAZON ASSURED & TRUST BADGES FOOTER STRIP */ }
+  <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900 rounded-3xl p-6 text-white shadow-lg">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-amber-700/60">
+      <div className="flex flex-col items-center pt-2 md:pt-0">
+        <Truck className="w-8 h-8 text-amber-300 mb-2" />
+        <h4 className="font-bold text-sm">Insured Doorstep Pickup</h4>
+        <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
+          Safe tamper-proof transit pouch with OTP verification
+        </p>
+      </div>
 
-              <Link
-                to="/shops"
-                className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center gap-1"
-              >
-                <span>Explore All Shops</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+      <div className="flex flex-col items-center pt-2 md:pt-0">
+        <ShieldCheck className="w-8 h-8 text-amber-300 mb-2" />
+        <h4 className="font-bold text-sm">100% BIS Hallmarked</h4>
+        <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
+          Tested gold purity with government approved XRF scanners
+        </p>
+      </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {shops.map((shop) => (
-                <div
-                  key={shop.id}
-                  className="bg-stone-50/70 rounded-2xl border border-stone-200 hover:border-amber-300 p-4 flex flex-col justify-between transition-all hover:shadow-md"
-                >
-                  <div>
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center text-xl shadow-2xs">
-                        🏪
-                      </div>
-                      <span className="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
-                        Open Now
-                      </span>
-                    </div>
+      <div className="flex flex-col items-center pt-2 md:pt-0">
+        <Clock className="w-8 h-8 text-amber-300 mb-2" />
+        <h4 className="font-bold text-sm">Same-Day Express Bench</h4>
+        <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
+          90% of ring sizing & soldering completed within hours
+        </p>
+      </div>
 
-                    <h3 className="font-bold text-stone-900 text-sm mb-1">{shop.name}</h3>
-
-                    <div className="flex items-center gap-1 mb-2">
-                      <span className="bg-emerald-700 text-white text-[10px] font-bold px-1.5 py-0.2 rounded flex items-center gap-0.5">
-                        {shop.rating || '4.8'} <Star className="w-2.5 h-2.5 fill-white" />
-                      </span>
-                      <span className="text-[11px] text-stone-500">
-                        • Verified Artisan
-                      </span>
-                    </div>
-
-                    <div className="flex items-center gap-1 text-xs text-stone-500 mb-3">
-                      <MapPin className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                      <span className="line-clamp-1">{shop.city}, {shop.state}</span>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {(shop.services || []).slice(0, 2).map((svc) => (
-                        <span key={svc} className="text-[10px] bg-white text-stone-700 px-2 py-0.5 rounded-md border border-stone-200">
-                          {svc}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <Link
-                    to="/booking"
-                    className="w-full py-2 bg-stone-900 hover:bg-amber-700 text-white text-xs font-bold rounded-xl text-center block transition-colors"
-                  >
-                    Select Artisan
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* 7. AMAZON ASSURED & TRUST BADGES FOOTER STRIP */}
-        <div className="bg-gradient-to-r from-amber-900 via-amber-800 to-amber-900 rounded-3xl p-6 text-white shadow-lg">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-amber-700/60">
-            <div className="flex flex-col items-center pt-2 md:pt-0">
-              <Truck className="w-8 h-8 text-amber-300 mb-2" />
-              <h4 className="font-bold text-sm">Insured Doorstep Pickup</h4>
-              <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
-                Safe tamper-proof transit pouch with OTP verification
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center pt-2 md:pt-0">
-              <ShieldCheck className="w-8 h-8 text-amber-300 mb-2" />
-              <h4 className="font-bold text-sm">100% BIS Hallmarked</h4>
-              <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
-                Tested gold purity with government approved XRF scanners
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center pt-2 md:pt-0">
-              <Clock className="w-8 h-8 text-amber-300 mb-2" />
-              <h4 className="font-bold text-sm">Same-Day Express Bench</h4>
-              <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
-                90% of ring sizing & soldering completed within hours
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center pt-2 md:pt-0">
-              <Award className="w-8 h-8 text-amber-300 mb-2" />
-              <h4 className="font-bold text-sm">7-Day Free Warranty</h4>
-              <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
-                Complete peace of mind with 100% escrow protection
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* 8. QUICK CTA BANNER */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 text-center space-y-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
-            India's #1 Jewellery Repair Marketplace
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 font-serif">
-            Restore Your Precious Jewellery to Showroom Brilliance
-          </h2>
-          <p className="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto">
-            Book an appointment online, pay securely via PhonePe or at counter, and get lifetime guaranteed repairs.
-          </p>
-          <div className="pt-2 flex flex-wrap justify-center gap-3">
-            <Link
-              to="/booking"
-              className="btn-gold px-8 py-3.5 rounded-xl text-white font-bold text-sm shadow-md flex items-center gap-2"
-            >
-              <span>Book Appointment Now</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <a
-              href="tel:+918800123456"
-              className="px-6 py-3.5 rounded-xl border border-stone-300 font-semibold text-xs sm:text-sm text-stone-700 hover:bg-stone-50 flex items-center gap-2"
-            >
-              <Phone className="w-4 h-4 text-amber-700" />
-              <span>Expert Artisan Helpline</span>
-            </a>
-          </div>
-        </div>
-
+      <div className="flex flex-col items-center pt-2 md:pt-0">
+        <Award className="w-8 h-8 text-amber-300 mb-2" />
+        <h4 className="font-bold text-sm">7-Day Free Warranty</h4>
+        <p className="text-[11px] text-amber-200/80 max-w-xs mt-0.5">
+          Complete peace of mind with 100% escrow protection
+        </p>
       </div>
     </div>
+  </div>
+
+  {/* 8. QUICK CTA BANNER */ }
+  <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200 text-center space-y-3">
+    <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+      India's #1 Jewellery Repair Marketplace
+    </span>
+    <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 font-serif">
+      Restore Your Precious Jewellery to Showroom Brilliance
+    </h2>
+    <p className="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto">
+      Book an appointment online, pay securely via PhonePe or at counter, and get lifetime guaranteed repairs.
+    </p>
+    <div className="pt-2 flex flex-wrap justify-center gap-3">
+      <Link
+        to="/booking"
+        className="btn-gold px-8 py-3.5 rounded-xl text-white font-bold text-sm shadow-md flex items-center gap-2"
+      >
+        <span>Book Appointment Now</span>
+        <ArrowRight className="w-4 h-4" />
+      </Link>
+      <a
+        href="tel:+918800123456"
+        className="px-6 py-3.5 rounded-xl border border-stone-300 font-semibold text-xs sm:text-sm text-stone-700 hover:bg-stone-50 flex items-center gap-2"
+      >
+        <Phone className="w-4 h-4 text-amber-700" />
+        <span>Expert Artisan Helpline</span>
+      </a>
+    </div>
+  </div>
+
+      </div >
+    </div >
   );
 }
