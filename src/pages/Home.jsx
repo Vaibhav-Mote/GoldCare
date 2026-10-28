@@ -31,6 +31,9 @@ import { getShops } from '../services/localStorageService';
 import ringResizeImg from '../assets/deals/ring-resizing.jpg';
 import chainSolderImg from '../assets/deals/chain-soldering.jpg';
 import diamondSettingImg from '../assets/deals/diamond-setting.jpg';
+import ultrasonicPolishImg from '../assets/deals/ultrasonic-polishing.jpg';
+import gemstoneResetImg from '../assets/deals/gemstone-resetting.jpg';
+import mangalsutraRestringImg from '../assets/deals/mangalsutra-restringing.jpg';
 
 // Flipkart/Amazon Style Top Category Bubble Icons
 const QUICK_CATEGORIES = [
@@ -158,6 +161,7 @@ const LIGHTNING_DEALS = [
     claimed: 86,
     badge: 'Hot Offer',
     isAssured: true,
+    image: ultrasonicPolishImg,
     imageIcon: '✨',
     turnaround: '60 Mins'
   },
@@ -174,6 +178,7 @@ const LIGHTNING_DEALS = [
     claimed: 55,
     badge: 'Artisan Choice',
     isAssured: true,
+    image: gemstoneResetImg,
     imageIcon: '💠',
     turnaround: '1-2 Days'
   },
@@ -190,6 +195,7 @@ const LIGHTNING_DEALS = [
     claimed: 80,
     badge: 'Festive Deal',
     isAssured: true,
+    image: mangalsutraRestringImg,
     imageIcon: '📿',
     turnaround: '3 Hours'
   }
